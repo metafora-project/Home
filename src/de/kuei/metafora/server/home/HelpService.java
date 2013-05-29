@@ -79,12 +79,10 @@ public class HelpService extends RemoteServiceServlet implements HelpServerLink 
 		sendLandmark(users, message, token, selectedUrl, openUrls, groupId,
 				challengeId, challengeName, allUsers);
 
-		// TODO: test
-		System.err.println("Others: " + others);
 		if (others) {
 			String helpMessage = allUsers + " of group " + groupId
 					+ " need help and says: " + message;
-			String feedback = generateFeedbackMessage(helpMessage);
+			String feedback = generateFeedbackMessage(helpMessage, groupId);
 			StartupServlet.sendToCommand(feedback);
 			System.err.println(feedback);
 		}
@@ -298,8 +296,13 @@ public class HelpService extends RemoteServiceServlet implements HelpServerLink 
 
 			Element property2 = doc.createElement("property");
 			contentProperties.appendChild(property2);
-			property2.setAttribute("name", "INDICATOR_TYPE");
+			property2.setAttribute("name", "LANDMARK_TYPE");
 			property2.setAttribute("value", "ACTIVITY");
+
+			property2 = doc.createElement("property");
+			contentProperties.appendChild(property2);
+			property2.setAttribute("name", "L2L2_TAG");
+			property2.setAttribute("value", "MUTUAL_ENGAGEMENT");
 
 			property2 = doc.createElement("property");
 			contentProperties.appendChild(property2);
@@ -335,7 +338,7 @@ public class HelpService extends RemoteServiceServlet implements HelpServerLink 
 		}
 	}
 
-	public static String generateFeedbackMessage(String message) {
+	public static String generateFeedbackMessage(String message, String groupId) {
 
 		String interruptionType = "no_interruption";
 
@@ -356,6 +359,7 @@ public class HelpService extends RemoteServiceServlet implements HelpServerLink 
 
 			cfc.addContentProperty("SENDING_TOOL", StartupServlet.toolname);
 			cfc.addContentProperty("RECEIVING_TOOL", StartupServlet.toolname);
+			cfc.addContentProperty("GROUP_ID", groupId);
 
 			return cfc.getDocument();
 

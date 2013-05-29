@@ -62,10 +62,10 @@ public class Usermanager {
 		active = new Vector<String>();
 	}
 
-	public Vector<String> getActiveUsers(){
+	public Vector<String> getActiveUsers() {
 		return active;
 	}
-	
+
 	public void loadUsers() {
 		Vector<String[]> ul = MysqlConnector.getInstance().loadUsers();
 		for (String[] u : ul) {
@@ -195,6 +195,11 @@ public class Usermanager {
 			property2.setAttribute("name", "ACTIVITY_TYPE");
 			property2.setAttribute("value", "LOGIN");
 
+			property2 = doc.createElement("property");
+			contentProperties.appendChild(property2);
+			property2.setAttribute("name", "GROUP_ID");
+			property2.setAttribute("value", groupId);
+
 			String xmlXMPPMessage = XMLUtils.documentToString(doc,
 					"http://metafora.ku-eichstaett.de/dtd/commonformat.dtd");
 
@@ -227,6 +232,7 @@ public class Usermanager {
 						Classification.other, "REGISTER", StartupServlet.logged);
 				creator.addContentProperty("SENDING_TOOL",
 						StartupServlet.toolname);
+				creator.addContentProperty("GROUP_ID", groupId);
 
 				creator.addUser(user, ip, Role.originator);
 				Vector<String> party = getLocalUsers(ip);
@@ -470,6 +476,10 @@ public class Usermanager {
 			}
 		}
 
+		System.err.println("Home: Usermanager.setTeam: Party members: "
+				+ party.size() + ", Token: " + ip + ", old group: " + oldTeam
+				+ ", new group: " + team);
+
 		for (String user : party) {
 
 			UserLogoutEvent logoutEvent = new UserLogoutEvent(user, oldTeam);
@@ -520,6 +530,7 @@ public class Usermanager {
 
 				creator.setObject("0", "ELEMENT");
 				creator.addProperty("GROUP_ID", team);
+				creator.addContentProperty("GROUP_ID", team);
 
 				StartupServlet.sendToLogger(creator.getDocument());
 				StartupServlet.sendToCommand(creator.getDocument());
@@ -563,6 +574,16 @@ public class Usermanager {
 				property.setAttribute("name", "GROUP_ID");
 				property.setAttribute("value", team);
 
+				property = doc.createElement("property");
+				properties.appendChild(property);
+				property.setAttribute("name", "CHALLENGE_ID");
+				property.setAttribute("value", challengeId);
+
+				property = doc.createElement("property");
+				properties.appendChild(property);
+				property.setAttribute("name", "OLD_GROUP");
+				property.setAttribute("value", oldTeam);
+
 				Element content = doc.createElement("content");
 				action.appendChild(content);
 
@@ -589,6 +610,11 @@ public class Usermanager {
 				contentProperties.appendChild(property2);
 				property2.setAttribute("name", "ACTIVITY_TYPE");
 				property2.setAttribute("value", "GROUP_SWITCH");
+
+				property2 = doc.createElement("property");
+				contentProperties.appendChild(property2);
+				property2.setAttribute("name", "GROUP_ID");
+				property2.setAttribute("value", team);
 
 				String xmlXMPPMessage = XMLUtils
 						.documentToString(doc,

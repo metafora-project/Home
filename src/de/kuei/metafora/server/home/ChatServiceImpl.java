@@ -161,6 +161,11 @@ public class ChatServiceImpl extends RemoteServiceServlet implements
 
 			property2 = doc.createElement("property");
 			contentProperties.appendChild(property2);
+			property2.setAttribute("name", "GROUP_ID");
+			property2.setAttribute("value", team);
+			
+			property2 = doc.createElement("property");
+			contentProperties.appendChild(property2);
 			property2.setAttribute("name", "CHALLENGE_ID");
 			property2.setAttribute("value", challengeId);
 
@@ -427,6 +432,11 @@ public class ChatServiceImpl extends RemoteServiceServlet implements
 			contentProperties.appendChild(property2);
 			property2.setAttribute("name", "LANDMARK_TYPE");
 			property2.setAttribute("value", "ACTIVITY");
+			
+			property2 = doc.createElement("property");
+			contentProperties.appendChild(property2);
+			property2.setAttribute("name", "L2L2_TAG");
+			property2.setAttribute("value", "MUTUAL_ENGAGEMENT");
 
 			property2 = doc.createElement("property");
 			contentProperties.appendChild(property2);

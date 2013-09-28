@@ -116,6 +116,8 @@ public class MysqlInitConnector {
 					String mod = rs.getString("modul");
 					String connectionname = rs.getString("connectionname");
 
+					System.err.println("Server "+servername+" ("+connectionname+"): "+user+":"+password+"@"+serverUrl);
+					
 					ServerDescription description = new ServerDescription(
 							serverUrl, user, password, device, mod,
 							connectionname);

@@ -405,6 +405,8 @@ public class Home implements EntryPoint {
 			}
 			TeamWidget.getInstance().setTeamName(Home.groupName);
 		}
+		ChatAwarenessCounter.getInstance().initCounter();
+		FeedbackAwarenessCounter.getInstance().initCounter();
 	}
 
 	private void initializeData() {
@@ -520,8 +522,7 @@ public class Home implements EntryPoint {
 		arrayList.add("black");
 		urlMap.put(language.Notes(), arrayList);
 
-		
-		//Messaging Tool
+		// Messaging Tool
 		arrayList = new ArrayList<String>();
 		EncodingUrlBuilder messagingUrlBuilder = new EncodingUrlBuilder();
 		if (toolData.containsKey("messaging")) {
@@ -1026,7 +1027,7 @@ public class Home implements EntryPoint {
 			url += "&challengeId=" + challengeId;
 			url += "&challengeName=" + URL.encode(challengeName);
 
-			//TODO: Add parameter to init database!
+			// TODO: Add parameter to init database!
 			if (GWT.getModuleBaseURL().contains("metaforaserver")) {
 				url += "&testServer=false";
 			} else {

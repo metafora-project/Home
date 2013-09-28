@@ -48,17 +48,17 @@ public class Usermanager {
 	private Map<String, String> salts;
 	private Vector<String> teams;
 
-	private Map<String, String> tokenToTeam;
-	private Map<String, String> userToIp;
+	private Map<String, String> tokenToGroupId;
+	private Map<String, String> userToToken;
 	private Vector<String> active;
 
 	private Usermanager() {
 		users = Collections.synchronizedMap(new HashMap<String, String>());
 		salts = Collections.synchronizedMap(new HashMap<String, String>());
 		teams = new Vector<String>();
-		tokenToTeam = Collections
+		tokenToGroupId = Collections
 				.synchronizedMap(new HashMap<String, String>());
-		userToIp = Collections.synchronizedMap(new HashMap<String, String>());
+		userToToken = Collections.synchronizedMap(new HashMap<String, String>());
 		active = new Vector<String>();
 	}
 
@@ -96,9 +96,9 @@ public class Usermanager {
 				logout(user, "", "", "");
 
 			active.add(user);
-			userToIp.put(user, token);
+			userToToken.put(user, token);
 
-			if (tokenToTeam.get(token) == null)
+			if (tokenToGroupId.get(token) == null)
 				setTeam(token, groupId, true);
 
 			UserLoginEvent event = new UserLoginEvent(user, token, groupId);
@@ -291,15 +291,15 @@ public class Usermanager {
 			logout(user, groupId, challengeId, challengeName);
 		}
 
-		tokenToTeam.remove(token);
+		tokenToGroupId.remove(token);
 	}
 
 	public void logout(String user, String groupId, String challengeId,
 			String challengeName) {
-		String ip = userToIp.get(user);
+		String ip = userToToken.get(user);
 
 		active.remove(user);
-		userToIp.remove(user);
+		userToToken.remove(user);
 
 		UserLogoutEvent event = new UserLogoutEvent(user, groupId);
 
@@ -409,18 +409,50 @@ public class Usermanager {
 	}
 
 	public String getIpForUser(String user, String ip) {
-		return userToIp.get(user);
+		return userToToken.get(user);
 	}
 
 	private Vector<String> getUsersForIp(String ip) {
 		Vector<String> users = new Vector<String>();
 
-		for (String user : userToIp.keySet()) {
-			if (userToIp.get(user).equals(ip)) {
+		for (String user : userToToken.keySet()) {
+			if (userToToken.get(user).equals(ip)) {
 				users.add(user);
 			}
 		}
 
+		return users;
+	}
+	
+	public String getGroupForUser(String user){
+		String token = userToToken.get(user);
+		return tokenToGroupId.get(token);
+	}
+	
+	public String getGroupForToken(String token){
+		return tokenToGroupId.get(token);
+	}
+	
+	public Vector<String> getTokensForGroup(String group){
+		if(group == null)
+			return new Vector<String>();
+		
+		Vector<String> tokens = new Vector<String>();
+		for(String token : tokenToGroupId.keySet()){
+			if(group.equals(tokenToGroupId.get(token))){
+				tokens.add(token);
+			}
+		}
+		return tokens;
+	}
+	
+	public Vector<String> getUsersForTokens(Vector<String> tokens){
+		Vector<String> users = new Vector<String>();
+		for(String user : userToToken.keySet()){
+			if(tokens.contains(userToToken.get(user))){
+				users.add(user);
+			}
+		}
 		return users;
 	}
 
@@ -459,19 +491,19 @@ public class Usermanager {
 
 		saveSelectedTeam(ip, team, challengeId, map);
 
-		String oldTeam = tokenToTeam.get(ip);
+		String oldTeam = tokenToGroupId.get(ip);
 
 		if (oldTeam != null && oldTeam.equals(team)) {
 			return 1;
 		}
 
-		tokenToTeam.put(ip, team);
+		tokenToGroupId.put(ip, team);
 
 		// search all users for that client
 		Vector<String> party = new Vector<String>();
 
-		for (String user : userToIp.keySet()) {
-			if (userToIp.get(user).equals(ip)) {
+		for (String user : userToToken.keySet()) {
+			if (userToToken.get(user).equals(ip)) {
 				party.add(user);
 			}
 		}
@@ -493,9 +525,9 @@ public class Usermanager {
 		sendMessage(groupEvent, Usermanager.userDomain);
 
 		HashMap<String, Vector<String>> teamToUsers = new HashMap<String, Vector<String>>();
-		for (String user : userToIp.keySet()) {
-			String useraddress = userToIp.get(user);
-			String userteam = tokenToTeam.get(useraddress);
+		for (String user : userToToken.keySet()) {
+			String useraddress = userToToken.get(user);
+			String userteam = tokenToGroupId.get(useraddress);
 			Vector<String> teammembers = teamToUsers.get(userteam);
 			if (teammembers == null) {
 				teammembers = new Vector<String>();
@@ -631,7 +663,7 @@ public class Usermanager {
 	}
 
 	public String getTeamForUser(String user) {
-		return tokenToTeam.get(userToIp.get(user));
+		return tokenToGroupId.get(userToToken.get(user));
 	}
 
 	public Vector<String> getUsers() {
@@ -646,7 +678,7 @@ public class Usermanager {
 
 	public String getUserForIP(String ip) {
 		for (String user : active) {
-			if (userToIp.get(user).equals(ip)) {
+			if (userToToken.get(user).equals(ip)) {
 				return user;
 			}
 		}
@@ -654,26 +686,26 @@ public class Usermanager {
 	}
 
 	public String getTeamName(String token) {
-		return tokenToTeam.get(token);
+		return tokenToGroupId.get(token);
 	}
 
 	public Vector<Vector<String>> getTeam(String ip) {
-		if (tokenToTeam.get(ip) == null) {
+		if (tokenToGroupId.get(ip) == null) {
 			setTeam(ip, "Metafora", false);
 		}
 
 		Vector<Vector<String>> team = new Vector<Vector<String>>();
 		Vector<String> tn = new Vector<String>();
-		String teamname = tokenToTeam.get(ip);
+		String teamname = tokenToGroupId.get(ip);
 		tn.add(teamname);
 		team.add(tn);
 
 		Vector<String> remote = new Vector<String>();
-		for (String address : tokenToTeam.keySet()) {
-			if (!ip.equals(address) && tokenToTeam.get(address) != null
-					&& tokenToTeam.get(address).equals(teamname)) {
-				for (String user : userToIp.keySet()) {
-					if (userToIp.get(user).equals(address)) {
+		for (String address : tokenToGroupId.keySet()) {
+			if (!ip.equals(address) && tokenToGroupId.get(address) != null
+					&& tokenToGroupId.get(address).equals(teamname)) {
+				for (String user : userToToken.keySet()) {
+					if (userToToken.get(user).equals(address)) {
 						remote.add(user);
 					}
 				}
@@ -682,8 +714,8 @@ public class Usermanager {
 		team.add(remote);
 
 		Vector<String> local = new Vector<String>();
-		for (String user : userToIp.keySet()) {
-			if (userToIp.get(user).equals(ip)) {
+		for (String user : userToToken.keySet()) {
+			if (userToToken.get(user).equals(ip)) {
 				local.add(user);
 			}
 		}
@@ -693,7 +725,7 @@ public class Usermanager {
 	}
 
 	public String getIpForUser(String username) {
-		return userToIp.get(username);
+		return userToToken.get(username);
 	}
 
 	public void replacePassword(String user, String salt, String shaPassword,
@@ -727,8 +759,8 @@ public class Usermanager {
 	 */
 	public Vector<String> getLocalUsers(String token) {
 		Vector<String> local = new Vector<String>();
-		for (String user : userToIp.keySet()) {
-			if (userToIp.get(user).equals(token)) {
+		for (String user : userToToken.keySet()) {
+			if (userToToken.get(user).equals(token)) {
 				local.add(user);
 			}
 		}
@@ -736,23 +768,23 @@ public class Usermanager {
 	}
 
 	public void registerSession(String token) {
-		tokenToTeam.put(token, "Metafora");
+		tokenToGroupId.put(token, "Metafora");
 		System.err.println("Home: Usermanager: New session: " + token);
 	}
 
 	public void refreshSession(String token, String oldToken) {
-		String team = tokenToTeam.get(oldToken);
+		String team = tokenToGroupId.get(oldToken);
 
 		Vector<String> users = new Vector<String>();
-		for (String user : userToIp.keySet()) {
-			if (userToIp.get(user).equals(oldToken)) {
+		for (String user : userToToken.keySet()) {
+			if (userToToken.get(user).equals(oldToken)) {
 				users.add(user);
 			}
 		}
 
-		tokenToTeam.put(token, team);
+		tokenToGroupId.put(token, team);
 		for (String user : users) {
-			userToIp.put(user, token);
+			userToToken.put(user, token);
 			System.err.println("Home: Usermanager: Session refresh for user "
 					+ user + ". Old token: " + oldToken + ", new token: "
 					+ token);
@@ -764,8 +796,8 @@ public class Usermanager {
 
 	public Vector<String> getTokensForTeam(String group) {
 		Vector<String> tokens = new Vector<String>();
-		for (String token : tokenToTeam.keySet()) {
-			String tokenGroup = tokenToTeam.get(token);
+		for (String token : tokenToGroupId.keySet()) {
+			String tokenGroup = tokenToGroupId.get(token);
 			System.err.println("Home.Usermanager: getTokensForTeam: Token: "
 					+ token + ", Team: " + tokenGroup);
 			if (tokenGroup.equals(group)) {

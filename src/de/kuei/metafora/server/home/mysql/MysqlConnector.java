@@ -29,12 +29,19 @@ public class MysqlConnector {
 	private Connection connection;
 
 	private MysqlConnector() {
+		
+		System.err.println("MySQL: Starting MysqlConnector...");
+		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			try {
+				System.err.println("MySQL: Connection to "
+						+ MysqlConnector.url +" as "+MysqlConnector.user);
 				connection = DriverManager.getConnection(MysqlConnector.url,
 						MysqlConnector.user, MysqlConnector.password);
 			} catch (SQLException e) {
+				System.err.println("MySQL: Loading init failed because "
+						+ e.getMessage());
 				e.printStackTrace();
 			}
 		} catch (ClassNotFoundException e) {

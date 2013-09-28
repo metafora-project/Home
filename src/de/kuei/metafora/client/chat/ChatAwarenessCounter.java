@@ -6,6 +6,8 @@ import java.util.logging.Logger;
 import com.extjs.gxt.ui.client.event.ComponentEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
+import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Window;
 
 import de.kuei.metafora.client.Home;
 
@@ -24,6 +26,7 @@ public class ChatAwarenessCounter implements Listener<ComponentEvent> {
 
 	private ContentPanel chatPanel = null;
 	private int count = 0;
+	private boolean isInitialized = false;
 	private String title = "";
 
 	private boolean enabled = true;
@@ -55,11 +58,15 @@ public class ChatAwarenessCounter implements Listener<ComponentEvent> {
 		} else {
 			count = 0;
 		}
+		if (isInitialized) {
+			Cookies.setCookie("metaforachatcount", "" + count);
+		}
 	}
 
 	@Override
 	public void handleEvent(ComponentEvent be) {
 		count = 0;
+		Cookies.setCookie("metaforachatcount", "" + count);
 		updateHeader();
 		logger.log(
 				Level.INFO,
@@ -84,4 +91,14 @@ public class ChatAwarenessCounter implements Listener<ComponentEvent> {
 		}
 	}
 
+	public void initCounter() {
+		if (!isInitialized) {
+			if (Cookies.getCookie("metaforachatcount") != null) {
+				count = Integer
+						.parseInt(Cookies.getCookie("metaforachatcount"));
+			}
+			isInitialized = true;
+			updateHeader();
+		}
+	}
 }

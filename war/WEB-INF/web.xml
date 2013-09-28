@@ -79,6 +79,17 @@
 		<url-pattern>/home/gwteventservice</url-pattern>
 	</servlet-mapping>
   
+   <servlet>
+    <servlet-name>usergroup</servlet-name>
+    <servlet-class>de.kuei.metafora.server.home.UserGroupServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>usergroup</servlet-name>
+    <url-pattern>/home/usergroup</url-pattern>
+  </servlet-mapping>
+  
+  
   <servlet>
   	<servlet-name>startup_servlet</servlet-name>
 	<servlet-class>de.kuei.metafora.server.home.StartupServlet</servlet-class>

@@ -26,8 +26,8 @@ public class StartupServlet extends HttpServlet {
 	public static String jugglerName = "JUGGLER";
 	public static String mathName = "MATH";
 
-	public static String[] planningTool = new String[] { "http",
-			"metaforaserver.ku.de", "planningtoolsolo/" };
+	public static String[] planningTool = new String[] { "https",
+			"metafora-project.de", "planningtoolsolo/" };
 	public static String[] lasad = new String[] { "http",
 			"adapterrex.hcii.cs.cmu.edu", "lasad/", "8090" };
 	public static String[] piki = new String[] {"http", "test.silentbaystudios.com", "metafora_piki/test/piki.php"};
@@ -42,8 +42,8 @@ public class StartupServlet extends HttpServlet {
 			"physt/" };
 	public static String[] math = new String[] { "http", "etl.ppp.uoa.gr",
 			"malt/index.html" };
-	public static String[] workbench = new String[] { "http",
-			"metaforaserver.ku.de", "workbench/" };
+	public static String[] workbench = new String[] { "https",
+			"metafora-project.de", "workbench/" };
 
 	private static XmppMUC logger;
 	private static XmppMUC analysis;

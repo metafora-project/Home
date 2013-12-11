@@ -13,7 +13,7 @@ import de.kuei.metafora.shared.HistoryData;
 
 public class MysqlConnector {
 
-	public static String url = "jdbc:mysql://metafora.ku-eichstaett.de/metafora?useUnicode=true&characterEncoding=UTF-8";
+	public static String url = "jdbc:mysql://metafora-project.de/metafora?useUnicode=true&characterEncoding=UTF-8";
 	public static String user = "meta";
 	public static String password = "didPfM";
 

@@ -175,7 +175,7 @@ public class ChatServiceImpl extends RemoteServiceServlet implements
 			property2.setAttribute("value", challengeName);
 
 			String xmlXMPPMessage = XMLUtils.documentToString(doc,
-					"http://metafora.ku-eichstaett.de/dtd/commonformat.dtd");
+					StartupServlet.commonformat);
 
 			StartupServlet.sendToAnalysis(xmlXMPPMessage);
 		} catch (XMLException e) {
@@ -338,7 +338,7 @@ public class ChatServiceImpl extends RemoteServiceServlet implements
 			property2.setAttribute("value", challengeName);
 
 			String xmlXMPPMessage = XMLUtils.documentToString(doc,
-					"http://metafora.ku-eichstaett.de/dtd/commonformat.dtd");
+					StartupServlet.commonformat);
 
 			StartupServlet.sendToAnalysis(xmlXMPPMessage);
 		} catch (XMLException e) {
@@ -464,7 +464,7 @@ public class ChatServiceImpl extends RemoteServiceServlet implements
 			property2.setAttribute("value", challengeName);
 
 			String xmlXMPPMessage = XMLUtils.documentToString(doc,
-					"http://metafora.ku-eichstaett.de/dtd/commonformat.dtd");
+					StartupServlet.commonformat);
 
 			StartupServlet.sendToAnalysis(xmlXMPPMessage);
 		} catch (XMLException e) {

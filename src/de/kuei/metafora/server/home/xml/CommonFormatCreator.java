@@ -4,6 +4,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import de.kuei.metafora.server.home.StartupServlet;
+
 public class CommonFormatCreator {
 	private Document doc;
 
@@ -496,7 +498,7 @@ public class CommonFormatCreator {
 	 */
 	public String getDocument() throws XMLException {
 		return XMLUtils.documentToString(doc,
-				"http://metafora.ku-eichstaett.de/dtd/commonformat.dtd");
+				StartupServlet.commonformat);
 	}
 
 	/**

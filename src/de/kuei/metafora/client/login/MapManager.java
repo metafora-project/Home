@@ -164,7 +164,7 @@ public class MapManager implements ClickHandler {
 				});
 
 		fMap = new Frame(
-				"http://metafora.ku-eichstaett.de/images/resources/PlanningTool");
+				"http://static.metafora-project.info/images/resources/PlanningTool");
 		fMap.setHeight("98%");
 		fMap.setWidth("98%");
 

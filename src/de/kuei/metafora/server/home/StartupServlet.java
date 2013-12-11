@@ -17,6 +17,7 @@ import de.kuei.metafora.xmppbridge.xmpp.XmppMUCManager;
 
 public class StartupServlet extends HttpServlet {
 
+	public static String commonformat = "http://static.metafora-project.info/dtd/commonformat.dtd";
 	public static String toolname = "METAFORA";
 	public static boolean logged = true;
 	public static String lasadName = "LASAD";

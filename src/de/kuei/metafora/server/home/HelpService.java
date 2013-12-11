@@ -202,7 +202,7 @@ public class HelpService extends RemoteServiceServlet implements HelpServerLink 
 			property2.setAttribute("value", challengeName);
 
 			String xmlXMPPMessage = XMLUtils.documentToString(doc,
-					"http://metafora.ku-eichstaett.de/dtd/commonformat.dtd");
+					StartupServlet.commonformat);
 
 			StartupServlet.sendToAnalysis(xmlXMPPMessage);
 		} catch (XMLException e) {
@@ -330,7 +330,7 @@ public class HelpService extends RemoteServiceServlet implements HelpServerLink 
 			property2.setAttribute("value", challengeName);
 
 			String xmlXMPPMessage = XMLUtils.documentToString(doc,
-					"http://metafora.ku-eichstaett.de/dtd/commonformat.dtd");
+					StartupServlet.commonformat);
 
 			StartupServlet.sendToAnalysis(xmlXMPPMessage);
 		} catch (XMLException e) {

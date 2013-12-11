@@ -201,7 +201,7 @@ public class Usermanager {
 			property2.setAttribute("value", groupId);
 
 			String xmlXMPPMessage = XMLUtils.documentToString(doc,
-					"http://metafora.ku-eichstaett.de/dtd/commonformat.dtd");
+					StartupServlet.commonformat);
 
 			StartupServlet.sendToAnalysis(xmlXMPPMessage);
 		} catch (XMLException exc) {
@@ -399,7 +399,7 @@ public class Usermanager {
 			property2.setAttribute("value", challengeName);
 
 			String xmlXMPPMessage = XMLUtils.documentToString(doc,
-					"http://metafora.ku-eichstaett.de/dtd/commonformat.dtd");
+					StartupServlet.commonformat);
 
 			StartupServlet.sendToAnalysis(xmlXMPPMessage);
 		} catch (XMLException exc) {
@@ -650,7 +650,7 @@ public class Usermanager {
 
 				String xmlXMPPMessage = XMLUtils
 						.documentToString(doc,
-								"http://metafora.ku-eichstaett.de/dtd/commonformat.dtd");
+								StartupServlet.commonformat);
 
 				StartupServlet.sendToAnalysis(xmlXMPPMessage);
 			} catch (XMLException exc) {
